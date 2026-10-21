@@ -1,0 +1,160 @@
+/**
+ * Qloo Cultural AI Type Definitions
+ * Strict types separating /search and /v2/insights domains
+ */
+
+export type SearchEntityType =
+  | "urn:entity:artist"
+  | "urn:entity:movie"
+  | "urn:entity:tv_show"
+  | "urn:entity:book"
+  | "urn:entity:podcast"
+  | "urn:entity:place"
+  | "urn:entity:brand"
+  | "urn:entity:destination"
+  | "urn:entity:person"
+  | "urn:entity:videogame"
+  | "urn:entity:locality";
+
+export type InsightEntityType =
+  | "urn:entity:artist"
+  | "urn:entity:movie"
+  | "urn:entity:tv_show"
+  | "urn:entity:book"
+  | "urn:entity:podcast"
+  | "urn:entity:place"
+  | "urn:entity:brand"
+  | "urn:entity:destination"
+  | "urn:entity:person"
+  | "urn:entity:video_game";
+
+export type DomainCategory =
+  | "music"
+  | "food"
+  | "film"
+  | "books"
+  | "podcasts"
+  | "places";
+
+export interface Entity {
+  id: string;
+  name: string;
+  type: InsightEntityType | SearchEntityType;
+  category: DomainCategory;
+  tags: string[];
+  imageUrl?: string;
+  locality?: string;
+  subtitle?: string;
+  externalUrls?: {
+    spotify?: string;
+    googleMaps?: string;
+    goodreads?: string;
+    justWatch?: string;
+    search?: string;
+  };
+}
+
+export interface ExplainabilitySignal {
+  anchorName: string;
+  anchorId: string;
+  score: number; // 0.0 to 1.0
+  reasonText: string; // e.g. "Because you love Fela Kuti (0.71)"
+}
+
+export interface InsightResult {
+  entity: Entity;
+  rawAffinity: number;
+  normalizedFamiliarity: number; // 0 (unfamiliar) to 1 (familiar)
+  novelty: number; // 1 - normalizedFamiliarity + locality bonus
+  explanation?: ExplainabilitySignal[];
+}
+
+export interface InsightRequest {
+  filterType: InsightEntityType;
+  signalEntities: string[];
+  signalTags?: string[];
+  locationQuery?: string;
+  locationRadius?: number;
+  tagsFilter?: string[];
+  maxPriceLevel?: number;
+  contentRating?: string;
+  take?: number;
+  page?: number;
+  explainability?: boolean;
+}
+
+export interface CategoryGap {
+  category: DomainCategory;
+  label: string;
+  overlap: number; // 0.0 to 1.0 (computed)
+  verdict: string; // Plain sentence e.g. "0.62 — you'll find your feet here fast"
+  level: "easy" | "moderate" | "steep";
+}
+
+export interface CultureGapReadout {
+  originCity: string;
+  destinationCity: string;
+  overallOverlap: number;
+  summarySentence: string;
+  breakdown: CategoryGap[];
+}
+
+export type ItemRating = "unrated" | "loved" | "notForMe";
+
+export interface PlanItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  category: DomainCategory;
+  categoryIcon: string;
+  entity: Entity;
+  novelty: number;
+  familiarity: number;
+  rating: ItemRating;
+  explanation: ExplainabilitySignal[];
+  searchUrl: string;
+}
+
+export interface PlanWeek {
+  weekNumber: number; // 1 to 12
+  targetNovelty: number;
+  themeTitle: string;
+  themeSummary: string;
+  items: PlanItem[];
+  isExpanded: boolean;
+}
+
+export interface UserPreferences {
+  originCity: string;
+  destinationCity: string;
+  anchors: string[]; // 3-5 terms
+  resolvedAnchorIds: string[];
+  constraints: string[]; // e.g. "halal", "vegetarian", "low budget"
+  adventure: number; // 0-100
+  lovedTags: string[];
+  avoidTags: string[];
+  penalizedDomains: Record<DomainCategory, number>; // temporary penalty for next 2 weeks
+}
+
+export interface Persona {
+  id: string;
+  name: string;
+  age: number;
+  origin: string;
+  destination: string;
+  occupation: string;
+  bio: string;
+  anchors: string[];
+  constraints: string[];
+  adventure: number;
+  storyBeat: string;
+  avatarSeed: string;
+}
+
+export interface QlooAdapter {
+  resolveEntities(query: string, types: SearchEntityType[], limit?: number): Promise<Entity[]>;
+  findTags(query: string, limit?: number): Promise<{ id: string; name: string }[]>;
+  insights(req: InsightRequest): Promise<InsightResult[]>;
+  getFullCandidatePool(personaId: string): Promise<InsightResult[]>;
+  computeCultureGap(origin: string, destination: string, anchors: string[]): Promise<CultureGapReadout>;
+}

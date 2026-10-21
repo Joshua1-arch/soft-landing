@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Soft Landing "Arrival" Palette */
+  --bg-paper: #FBF9F5;
+  --bg-card: #FFFFFF;
+  --bg-muted: #F2EFE9;
+  --ink-deep: #14171A;
+  --ink-muted: #535C68;
+  --border-soft: #E2DDD5;
+  --border-strong: #C4BCB0;
+  --signal: #1E4D3B; /* Deep botanical arrival green */
+  --signal-hover: #15382B;
+  --signal-light: #EBF3EF;
+  --signal-amber: #B25E16; /* For alerts / caution */
+  --shadow-subtle: 0 1px 3px rgba(20, 23, 26, 0.05), 0 1px 2px rgba(20, 23, 26, 0.03);
+  --shadow-card: 0 4px 12px rgba(20, 23, 26, 0.04), 0 1px 3px rgba(20, 23, 26, 0.02);
+  --shadow-elevated: 0 12px 24px -4px rgba(20, 23, 26, 0.08), 0 4px 8px -2px rgba(20, 23, 26, 0.03);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--bg-paper);
+  --color-card: var(--bg-card);
+  --color-muted-bg: var(--bg-muted);
+  --color-ink: var(--ink-deep);
+  --color-ink-muted: var(--ink-muted);
+  --color-border: var(--border-soft);
+  --color-signal: var(--signal);
+  --color-signal-hover: var(--signal-hover);
+  --color-signal-light: var(--signal-light);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-paper);
+  color: var(--ink-deep);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Accessibility focus visible indicator */
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+/* Touch targets min 44px */
+button, a, input, select {
+  min-height: 44px;
+}
+
+/* Reduced motion preference support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
