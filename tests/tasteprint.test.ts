@@ -3,7 +3,29 @@ import assert from "node:assert/strict";
 import { detectDomainType, extractTagNames } from "../lib/tasteprint/classify.ts";
 import { planCrossDomainLeaps, RICH_DOMAINS } from "../lib/tasteprint/cross-domain.ts";
 import { synthesizeTasteprint, CULTURAL_CLUSTERS } from "../lib/tasteprint/synthesis.ts";
+import { resolveCityCoordinates } from "../lib/tasteprint/locate.ts";
 import type { ResolvedLove, CrossDomainRecommendation } from "../lib/tasteprint/types.ts";
+
+describe("Tasteprint: Exact Geo-Coordinate Resolution (Preventing Misplaced Cities)", () => {
+  test("resolves Ibadan to exact coordinates in Oyo State (not Port Harcourt)", async () => {
+    const coords = await resolveCityCoordinates("Ibadan");
+    assert.ok(coords !== null);
+    // Ibadan is ~7.37 N, 3.94 E
+    assert.ok(Math.abs(coords.lat - 7.3775) < 0.1);
+    assert.ok(Math.abs(coords.lon - 3.947) < 0.1);
+  });
+
+  test("resolves major world cities accurately", async () => {
+    const lagos = await resolveCityCoordinates("Lagos");
+    assert.ok(lagos && Math.abs(lagos.lat - 6.5244) < 0.1);
+
+    const london = await resolveCityCoordinates("London");
+    assert.ok(london && Math.abs(london.lat - 51.5074) < 0.1);
+
+    const toronto = await resolveCityCoordinates("Toronto");
+    assert.ok(toronto && Math.abs(toronto.lat - 43.6532) < 0.1);
+  });
+});
 
 describe("Tasteprint: Input Classification & Domain Detection", () => {
   test("correctly identifies artist domain", () => {
