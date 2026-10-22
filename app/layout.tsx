@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Soft Landing — 12-Week Cultural On-Ramp",
+  title: "Tasteprint — Autonomous Cross-Domain Taste AI",
   description:
-    "A 12-week cultural on-ramp for people who just moved countries — sequenced by Qloo's taste graph, built on the fact that familiarity is a dose you can calibrate.",
+    "Tell me four things you love, and I'll show you who you are, what you'd love next, and where to find it near you. Powered by Qloo's live cultural intelligence graph.",
 };
 
 export default function RootLayout({

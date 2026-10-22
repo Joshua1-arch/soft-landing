@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import TasteMap from "@/components/TasteMap.tsx";
 import type {
   TasteprintResponse,
@@ -133,15 +132,10 @@ export default function TasteprintPage() {
           </div>
 
           <div className="flex items-center gap-4 text-xs">
-            <span className="text-[#535C68] hidden md:inline">
-              No login wall • 100% Honest Data
-            </span>
-            <Link
-              href="/plan"
-              className="text-[#1E4D3B] hover:text-[#15382B] font-medium border border-[#E2DDD5] hover:border-[#1E4D3B] px-3 py-1.5 rounded-lg transition"
-            >
-              Relocation Planner ↗
-            </Link>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#EBF3EF] border border-[#1E4D3B]/20 text-[#1E4D3B] font-semibold text-xs">
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+              <span>Taste AI™ Agent Live</span>
+            </div>
           </div>
         </div>
       </header>
