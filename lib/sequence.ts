@@ -51,20 +51,21 @@ export interface SequencingOptions {
  * Checks whether an item violates user hard constraints
  * E.g. vegetarian constraint violated if tagged "meat" or "churrasco" and not "vegetarian"
  */
-function violatesHardConstraints(item: InsightResult, constraints: string[]): boolean {
+export function violatesHardConstraints(item: InsightResult, constraints: string[]): boolean {
   const tags = item.entity.tags.map((t) => t.toLowerCase());
 
   for (const c of constraints) {
     const constraint = c.toLowerCase();
     if (constraint === "vegetarian" || constraint === "vegan") {
       if (item.entity.category === "food") {
-        const hasVeg = tags.some((t) => t.includes("veg") || t.includes("plant"));
         const hasMeat = tags.some((t) =>
-          ["meat", "chicken", "beef", "pork", "seafood", "fish", "suya", "churrasco", "barbecue", "bbq"].some((m) =>
-            t.includes(m)
-          )
+          [
+            "meat", "chicken", "beef", "pork", "seafood", "fish", "suya",
+            "churrasco", "barbecue", "bbq", "kebab", "kebabs", "steak",
+            "steakhouse", "burger", "burgers", "wings", "poultry"
+          ].some((m) => t.includes(m))
         );
-        if (hasMeat || !hasVeg) return true;
+        if (hasMeat) return true; // Exclude explicit meat
       }
     }
 

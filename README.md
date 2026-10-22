@@ -116,6 +116,9 @@ At $A=50$: $N(1) = 0.20$, $N(12) = 0.575$.
 
 Soft Landing is strictly an informational **cultural orientation and acculturation tool**. It makes **no clinical, therapeutic, mental health, or wellbeing claims**. It does not guarantee integration outcomes or replace community and social support networks.
 
+### Live Qloo Data & Dietary Constraints
+Real Qloo place responses accurately capture venue taxonomy, neighborhood location, and physical accessibility attributes (e.g., `"Wheelchair accessible entrance"`). However, explicit dietary certification tags (such as `"halal"` or `"vegetarian"`) are sparse in general city dining responses. To prevent emptying the food category while preserving user safety, Soft Landing strictly excludes items containing explicit meat or conflicting tags (`bbq`, `kebab`, `steak`, `pork`, `beef`, etc.), while items lacking explicit dietary certification tags are prominently flagged in the UI as *"Not confirmed vegetarian"* rather than silently assumed compliant.
+
 ---
 
 ## 📄 License

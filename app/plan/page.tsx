@@ -232,7 +232,7 @@ function PlanContent() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
               <div>
                 <h2 id="gap-title" className="text-xs font-bold uppercase tracking-wider text-[#535C68]">
-                  Culture-Gap Readout: {gapReadout.originCity} → {gapReadout.destinationCity}
+                  How well does your taste connect to {gapReadout.destinationCity}?
                 </h2>
                 <p className="text-xs text-[#535C68] mt-0.5">{gapReadout.summarySentence}</p>
               </div>
@@ -249,13 +249,21 @@ function PlanContent() {
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-[#14171A] w-24">{item.label}</span>
-                    <span className="font-mono text-xs text-[#535C68]">
-                      {item.overlap.toFixed(2)} overlap
-                    </span>
+                    {item.hasData ? (
+                      <span className="font-mono text-xs text-[#535C68]">
+                        {item.overlap.toFixed(2)} match
+                      </span>
+                    ) : (
+                      <span className="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded">
+                        Not enough data
+                      </span>
+                    )}
                   </div>
                   <span
                     className={`text-xs font-medium ${
-                      item.level === "steep"
+                      !item.hasData
+                        ? "text-[#535C68]"
+                        : item.level === "steep"
                         ? "text-[#B25E16]"
                         : item.level === "easy"
                         ? "text-[#1E4D3B]"
@@ -411,6 +419,17 @@ function PlanContent() {
                                 <span className="text-[10px] uppercase font-mono font-bold px-1.5 py-0.5 rounded bg-[#EBF3EF] text-[#1E4D3B]">
                                   {item.category}
                                 </span>
+                                {user?.constraints.includes("vegetarian") && item.category === "food" && (
+                                  item.entity.tags.some((t) => t.toLowerCase().includes("veg") || t.toLowerCase().includes("plant")) ? (
+                                    <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                      Verified vegetarian
+                                    </span>
+                                  ) : (
+                                    <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
+                                      Not confirmed vegetarian
+                                    </span>
+                                  )
+                                )}
                               </div>
                               <p className="text-xs text-[#535C68] mt-0.5">{item.subtitle}</p>
 
@@ -508,7 +527,7 @@ function PlanContent() {
                     <div key={idx} className="bg-[#FBF9F5] p-3.5 rounded-xl border border-[#E2DDD5]">
                       <div className="flex justify-between text-xs font-semibold text-[#14171A] mb-1.5">
                         <span>{exp.reasonText}</span>
-                        <span className="font-mono text-[#1E4D3B]">{exp.score}</span>
+                        <span className="font-mono font-bold text-[#1E4D3B]">Affinity: {exp.score}</span>
                       </div>
                       <div className="w-full bg-[#E2DDD5] h-2 rounded-full overflow-hidden">
                         <div
@@ -519,7 +538,7 @@ function PlanContent() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-xs text-[#535C68]">Why: similar audience affinity in destination metro</p>
+                  <p className="text-xs text-[#535C68]">Why: similar audience affinity in your destination metro</p>
                 )}
               </div>
             </div>

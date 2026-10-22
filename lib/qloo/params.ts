@@ -1,4 +1,4 @@
-import { InsightEntityType, InsightRequest } from "./types";
+import type { InsightEntityType, InsightRequest } from "./types.ts";
 
 /**
  * Parameter whitelist discipline per filter.type

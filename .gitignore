@@ -38,6 +38,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# temp scripts output
+scripts/verify-output*.txt
 next-env.d.ts
 
 .env
